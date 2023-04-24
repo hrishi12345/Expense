@@ -4,6 +4,7 @@ export const AuthContext = React.createContext({
   token: "",
   isLogin: false,
   fullName: "",
+  verify:false,
   login: (token, fullName) => {},
   logout: () => {}
 });
