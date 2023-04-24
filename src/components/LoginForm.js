@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import classes from './LoginForm.module.css'
 const AuthForm = () => {
     const enteredemail=useRef()
-    // const navigate=useNavigate()
+    const navigate=useNavigate()
     const eneredPass=useRef()
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading,setisLoading]=useState(false)
@@ -54,7 +54,7 @@ const AuthForm = () => {
           }
         }).then((data)=>{
           contextAtx.login(data.idToken)
-        //   navigate('/')
+           navigate('/')
         }).catch((err)=>
           alert(err)
         )
