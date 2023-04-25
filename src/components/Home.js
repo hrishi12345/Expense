@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 
 export default function Home() {
@@ -7,16 +7,48 @@ export default function Home() {
   const description = useRef();
   const [items, setItems] = useState([]);
 
+  // Fetch data on initial load
+  useEffect(() => {
+    fetch("https://hris-9fdcd-default-rtdb.firebaseio.com/items.json")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        const loadedItems = [];
+for (const key in data) {
+  loadedItems.push({
+    id: key,
+    exp: data[key].item.exp,
+    am: data[key].item.am,
+    desc: data[key].item.desc,
+  });
+}
+console.log(loadedItems)
+setItems(loadedItems);
+
+        
+      
+      });
+  }, []);
+
   const submitHandler = (event) => {
     event.preventDefault();
-
+    const uniqueId = () => {
+      const dateString = Date.now().toString(36);
+      const randomness = Math.random().toString(36).substr(2);
+      return dateString + randomness;
+    };
     const item = {
+      id: uniqueId(),
       exp: expense.current.value,
       am: amount.current.value,
       desc: description.current.value,
     };
-
-    setItems((prevItems) => [...prevItems, item]);
+    fetch("https://hris-9fdcd-default-rtdb.firebaseio.com/items.json", {
+      method: "POST",
+      body: JSON.stringify(item),
+    }).then(() => {
+      setItems((prevItems) => [...prevItems, item]);
+    });
 
     expense.current.value = "";
     amount.current.value = "";
@@ -36,8 +68,8 @@ export default function Home() {
           <input id="description" ref={description}></input>
           <button type="submit">Add Expense</button>
         </form>
-        {items.map((data, index) => (
-          <div key={index}>
+        {items.map((data) => (
+          <div key={data.id}>
             <ul>{data.exp}</ul>
             <ul>{data.am}</ul>
             <ul>{data.desc}</ul>
