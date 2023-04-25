@@ -2,6 +2,7 @@ import React,{ useContext, useRef, useState } from "react"
 import { AuthContext } from "../store/auth-context"
 import { useNavigate } from "react-router-dom";
 import classes from './LoginForm.module.css'
+import Forgot from "./ForogotPassword";
 const AuthForm = () => {
     const enteredemail=useRef()
     const navigate=useNavigate()
@@ -59,6 +60,7 @@ const AuthForm = () => {
           alert(err)
         )
       }
+      
     
     return (
       <React.Fragment>
@@ -74,11 +76,12 @@ const AuthForm = () => {
             <label htmlFor='password'>Your Password</label>
             <input type='password' id='password' required ref={eneredPass}/>
           </div>
+          <Forgot  />
           <div className={classes.actions}>
             {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
             {isLoading && <p>Data is fetching</p>}
             <button
-              type='button'
+              type='button'F
               className={classes.toggle}
               onClick={switchAuthModeHandler}
             >
