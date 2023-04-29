@@ -1,18 +1,17 @@
-
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../store/auth-context";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import './Header.css'
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store";
+
 
 function Header() {
-  const log = useContext(AuthContext);
+  const log = useSelector(state => state.auth)
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  
   const sub = () => {
     navigate("/profile");
-  };
-
-  const logout = () => {
-    log.logout();
   };
 
   useEffect(() => {
@@ -69,6 +68,15 @@ function Header() {
         alert("Error sending verification email.");
       });
   };
+  
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("auth");
+    localStorage.removeItem("data");
+    localStorage.removeItem("token"); // Remove the token item from local storage
+    navigate('/login'); // Redirect to login page after logout
+  };
+  
 
   return (
     <header>
@@ -82,8 +90,7 @@ function Header() {
       {log.isLogin && !log.verify && (
         <button onClick={verifyHandler}>Verify Email</button>
       )}
-      {log.isLogin && <button onClick={logout}>Logout</button>}
-      <span>Full name: {log.fullName}</span>
+      {log.isLogin && <button onClick={handleLogout}>Logout</button>}
     </header>
   );
 }

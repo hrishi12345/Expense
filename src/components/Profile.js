@@ -1,10 +1,13 @@
-import { useContext, useRef } from "react";
-import { AuthContext } from "../store/auth-context";
+import { useRef } from "react";
+
+import './Profile.css'
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const fullName = useRef();
   const imageUrl = useRef();
-  const token = useContext(AuthContext);
+  // const token = useContext(AuthContext);
+  const token=useSelector(state=>state.auth)
 
   const submitHandler = (event) => {
     event.preventDefault();
